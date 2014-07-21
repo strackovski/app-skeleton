@@ -1,9 +1,9 @@
 {
-    "name": "nv/skeleton_ci",
+    "name": "nv/app-skeleton",
     "version": "1.0.0",
     "type": "project",
     "homepage": "http://www.nv3.org",
-    "description": "CodeIgniter RESTFul Application Skeleton with Doctrine ORM, Twig, Assetic.",
+    "description": "RESTFul Web Application Skeleton with CodeIgniter, Doctrine ORM, Twig, Assetic.",
     "license": "MIT",
     "authors": [
         {
@@ -51,7 +51,6 @@
     },
     "extra": {
         "frameworkType": "CI"
-
     },
     "autoload": {
         "psr-4": {
@@ -60,7 +59,7 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "nv\\Project\\ProjectStarter::start"
+            "nv\\app\\skeleton\\ProjectStarter::start"
         ]
     }
 }
