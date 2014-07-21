@@ -1,0 +1,12 @@
+/* {PROJECT_NAME} CSS Styles */
+/* {AUTHOR_NAME} {AUTHOR_EMAIL} */
+
+/* Bootstrap rules reset/overwrite */
+
+
+/* Generic layout rules */
+body{}
+
+/* Project specific rules*/
+
+.test{color: #333;}
