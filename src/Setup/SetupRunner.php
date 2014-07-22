@@ -14,38 +14,32 @@ require 'vendor/autoload.php';
 
 /**
  * Class SetupRunner
- * @package nv\prostarter
+ *
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 final class SetupRunner
 {
     /**
-     * Start the project
+     * Run project setup scripts
      *
      * @param \Composer\Script\Event $event Composer post-install event
      * @return bool|int
      */
-    public static function start(\Composer\Script\Event $event)
+    public static function run(\Composer\Script\Event $event)
     {
-        print "Would you like to setup the project now? [Y/n]";
-        $handle = fopen("php://stdin", "r");
-
-        if (strtolower(trim(fgets($handle))) == 'y') {
-            $composer = $event->getComposer();
-            $package = explode('/', $composer->getPackage()->getName());
-            if (count($package) !== 2) {
-                return trigger_error(
-                    'Mis-configured package name: the name should be in '.
-                    'vendor/package format. Correct this in composer.json and try again.'
-                );
-            }
-            $appSetup = "nv\\{$package[1]}\\Setup\\ProjectSetup";
-            $setup = new $appSetup($package[1]);
-            if (is_object($setup) and method_exists($setup, 'configure')) {
-                return $setup->configure();
-            }
-            return trigger_error("Can't find Setup in {$appSetup}");
+        $composer = $event->getComposer();
+        $package = explode('/', $composer->getPackage()->getName());
+        if (count($package) !== 2) {
+            return trigger_error(
+                'Mis-configured package name: the name should be in '.
+                'vendor/package format. Correct this in composer.json and try again.'
+            );
         }
-        return print "Project ready.\n";
+        $appSetup = "nv\\{$package[1]}\\Setup\\ProjectSetup";
+        $setup = new $appSetup($package[1]);
+        if (is_object($setup) and method_exists($setup, 'configure')) {
+            return $setup->configure();
+        }
+        return trigger_error("Can't find Setup in {$appSetup}");
     }
 }
