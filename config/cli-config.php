@@ -1,6 +1,6 @@
 <?php
 /**
- * CLI Configuration File for Doctrine
+ * Doctrine CLI Configuration File
  */
 
 define('APPPATH', dirname(dirname(__FILE__)) . '/vendor/nv/codeigniter/application/');
