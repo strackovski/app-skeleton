@@ -59,7 +59,7 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "nv\\app\\skeleton\\ProjectStarter::start"
+            "nv\\app-skeleton\\Setup\\SetupRunner::run"
         ]
     }
 }
