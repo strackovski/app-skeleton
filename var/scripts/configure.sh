@@ -3,7 +3,7 @@
 
 BASE=${PWD}
 
-if [ -d $PWD/$1 ]; then
+if [ -d $BASE/$1 ]; then
 	echo "Directory already exists, aborting."
 else
 	git clone https://github.com/strackovski/app-skeleton.git $1
