@@ -68,7 +68,6 @@ class ProjectSetup extends SetupAbstract
         }
 
         if ( ! $this->verifyDirectoryPermissions()) {
-            print "Fix the permission errors printed above.\n";
             return false;
         }
 
