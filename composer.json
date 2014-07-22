@@ -50,7 +50,8 @@
         "phpunit/phpunit": "4.1.*"
     },
     "extra": {
-        "frameworkType": "CI"
+        "frameworkType": "CI",
+        "frameworkVersion": "2.2"
     },
     "autoload": {
         "psr-4": {
