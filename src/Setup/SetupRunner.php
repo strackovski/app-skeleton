@@ -12,6 +12,10 @@ namespace nv\PROJECT_NAME\Setup;
 
 require dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php';
 
+if (!defined('BASEPATH')) {
+    define('BASEPATH', dirname(dirname(dirname(__FILE__))) . 'vendor/nv/codeigniter/system');
+}
+
 /**
  * Class SetupRunner
  *
@@ -22,8 +26,8 @@ final class SetupRunner
     /**
      * Run project setup scripts
      *
-     * @param \Composer\Script\Event $event Composer post-install event
-     * @return bool|int
+     * @param \Composer\Script\Event $event
+     * @return bool
      */
     public static function run(\Composer\Script\Event $event)
     {
@@ -31,15 +35,22 @@ final class SetupRunner
         $package = explode('/', $composer->getPackage()->getName());
         if (count($package) !== 2) {
             return trigger_error(
-                'Mis-configured package name: the name should be in '.
-                'vendor/package format. Correct this in composer.json and try again.'
+                'Misconfigured package name: the name should be in '.
+                'vendor/package format. Correct this in composer.json.'
             );
         }
         $appSetup = "nv\\{$package[1]}\\Setup\\ProjectSetup";
-        $setup = new $appSetup($package[1]);
-        if (is_object($setup) and method_exists($setup, 'configure')) {
-            return $setup->configure();
+        if (class_exists($appSetup)) {
+            $setup = new $appSetup($package[1]);
+            if (is_object($setup) and method_exists($setup, 'configure')) {
+                return $setup->configure();
+            }
+            return trigger_error(
+                "Method configure not available in {$appSetup}."
+            );
         }
-        return trigger_error("Can't find Setup in {$appSetup}");
+        return trigger_error(
+            "Class {$appSetup} not found."
+        );
     }
 }
