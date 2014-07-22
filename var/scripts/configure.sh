@@ -1,7 +1,7 @@
 #!/bin/bash
 # $1 Target directory name
 
-BASE=result=${PWD}
+BASE=${PWD}
 
 if [ -d $PWD/$1 ]; then
 	echo "Directory already exists, aborting."
