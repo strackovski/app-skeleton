@@ -58,9 +58,9 @@ class AssetAggregate
             throw new \Exception("Invalid asset configuration file.");
         }
 
-        if (is_array($config) and array_key_exists('assets_output_path', $config)) {
+        if (is_array($config) and array_key_exists('assets_output_dir', $config)) {
             $this->outputDir = dirname(dirname(dirname(__FILE__))) .
-                '/' . $config['assets_output_path'];
+                '/' . $config['assets_output_dir'];
         }
     }
 
@@ -81,7 +81,7 @@ class AssetAggregate
         $factory->setDebug(true);
 
         $js = $factory->createAsset(array(
-                dirname(dirname(dirname(__FILE__))) .
+            dirname(dirname(dirname(__FILE__))) .
                 '/vendor/twitter/bootstrap/dist/js/bootstrap.min.js',
             'js/*.js'
         ), array(
@@ -89,15 +89,15 @@ class AssetAggregate
         ));
 
         $css = $factory->createAsset(array(
-                dirname(dirname(dirname(__FILE__))) .
+            dirname(dirname(dirname(__FILE__))) .
                 '/vendor/twitter/bootstrap/dist/css/bootstrap.css',
             'css/*.css'
         ), array(
             'css_min'
         ));
 
-        $css->setTargetPath('css/styles.css');
-        $js->setTargetPath('js/scripts.js');
+        $css->setTargetPath('styles.css');
+        $js->setTargetPath('scripts.js');
 
         $this->am->set('scripts', $js);
         $this->am->set('styles', $css);
@@ -129,9 +129,13 @@ class AssetAggregate
      */
     public function dump($type)
     {
-        if (in_array($type, array('scripts', 'styles', 'images'))) {
+        if (in_array($type, $types = array('scripts', 'styles', 'images'))) {
             return $this->am->get($type)->dump();
         }
+        trigger_error(
+            "Trying to dump a non-existent type {$type}. ".
+                "Expected ". implode(' or ', $types) . "."
+        );
         return false;
     }
 }
