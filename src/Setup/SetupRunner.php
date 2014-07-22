@@ -10,7 +10,7 @@
  */
 namespace nv\PROJECT_NAME\Setup;
 
-require 'vendor/autoload.php';
+require dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php';
 
 /**
  * Class SetupRunner
