@@ -71,7 +71,7 @@ if (is_dir($application_folder)) {
 }
 
 define('ROOTPATH', dirname(dirname(BASEPATH)) . '/');
-/*
+
 if(!file_exists('vendor/autoload.php')){
     if(defined('ENVIRONMENT') and ENVIRONMENT == 'development'){
         exit(
@@ -84,5 +84,4 @@ if(!file_exists('vendor/autoload.php')){
     }
 }
 require_once "vendor/autoload.php";
-*/
 require_once BASEPATH.'core/CodeIgniter.php';
