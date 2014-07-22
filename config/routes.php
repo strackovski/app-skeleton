@@ -1,7 +1,21 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/*
+|--------------------------------------------------------------------------
+| Routes
+|--------------------------------------------------------------------------
+*/
 $route['default_controller'] = "app";
 $route['404_override'] = '';
 
+/*
+|--------------------------------------------------------------------------
+| Language routes
+|--------------------------------------------------------------------------
+|
+| When adding a new language simply create a new route taking the routes
+| bellow as examples.
+|
+*/
 $route['^sl/(.+)$'] = "$1";
 $route['^en/(.+)$'] = "$1";
 $route['^fr/(.+)$'] = "$1";
