@@ -3,6 +3,6 @@
 var/logs/*
 var/cache/orm/proxies/*
 var/cache/twig/*
-vendor/*
+vendor/
 docs/*
 composer.lock

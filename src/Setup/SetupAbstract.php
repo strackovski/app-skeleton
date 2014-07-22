@@ -84,17 +84,17 @@ abstract class SetupAbstract
      */
     protected function setConstant($sourceFile, $key, $value)
     {
-        if (!file_exists($this->dir . 'web/' . $sourceFile . ".php")) {
+        if (!file_exists($this->dir . $sourceFile . ".php")) {
             trigger_error("Invalid constants file.");
         }
-        $file = file_get_contents($this->dir . 'web/' . $sourceFile . ".php");
+        $file = file_get_contents($this->dir . $sourceFile . ".php");
         $pattern = '/define\(\''.strtoupper($key).'\', \'.*\'\);/';
         if (preg_match($pattern, $file) !== 1) {
             trigger_error("Invalid parameter {$key}.");
         }
         $replacement = "define('".strtoupper($key)."', '{$value}');";
         file_put_contents(
-            $this->dir . 'web/' . $sourceFile . ".php",
+            $this->dir . $sourceFile . ".php",
             trim(preg_replace($pattern, $replacement, $file)).PHP_EOL
         );
     }
@@ -109,11 +109,11 @@ abstract class SetupAbstract
      */
     protected function setConfigItem($configFile, $key, $value, $group = false)
     {
-        if (!file_exists($this->dir . "app/config/{$configFile}.php")) {
+        if (!file_exists($this->dir . "config/{$configFile}.php")) {
             trigger_error("Invalid configuration file {$configFile}.");
         }
 
-        $file = file_get_contents($this->dir . "app/config/{$configFile}.php");
+        $file = file_get_contents($this->dir . "config/{$configFile}.php");
         $fileKey = $configFile === 'database' ? 'db' : $configFile;
         $pattern = $group ?
             '/'.$fileKey.'\[\''.$group.'\'\]\[\''.$key.'\'\] = \'.*\';/' :
@@ -128,7 +128,7 @@ abstract class SetupAbstract
             "{$fileKey}['{$key}'] = '{$value}';";
 
         $newConfig = preg_replace($pattern, $replacement, $file);
-        file_put_contents($this->dir . "app/config/{$configFile}.php", trim($newConfig).PHP_EOL);
+        file_put_contents($this->dir . "config/{$configFile}.php", trim($newConfig).PHP_EOL);
     }
 
     /**
@@ -186,12 +186,14 @@ abstract class SetupAbstract
             try {
                 switch ($db['default']['dbdriver']) {
                     case 'mysqli':
-                        $connection = new \mysqli(
-                            $db['default']['hostname'],
-                            $db['default']['username'],
-                            $db['default']['password'],
-                            $db['default']['database']
-                        );
+                        if (class_exists('mysqli')) {
+                            $connection = new \mysqli(
+                                $db['default']['hostname'],
+                                $db['default']['username'],
+                                $db['default']['password'],
+                                $db['default']['database']
+                            );
+                        }
                         break;
                     case 'postgresql':
                         if (function_exists("pg_connect")) {
@@ -201,7 +203,7 @@ abstract class SetupAbstract
                                 "user={$db['default']['username']} ".
                                 "password={$db['default']['password']}"
                             )
-                                or die("\nCan't connect to database ".pg_last_error());
+                            or die("\nCan't connect to database ".pg_last_error());
                         }
                         break;
                     case 'mssql':
@@ -219,7 +221,7 @@ abstract class SetupAbstract
                                     $db['default']['database'],
                                     $connection
                                 )
-                                    or die("\nCant't open database {$db['default']['database']}");
+                                or die("\nCant't open database {$db['default']['database']}");
                             }
                         }
                         break;
@@ -232,7 +234,7 @@ abstract class SetupAbstract
         }
         trigger_error(
             "Failed retrieving database connection parameters.\n".
-            "Make sure parameters are set in app/config/database.php"
+            "Make sure parameters are set in config/database.php"
         );
         return 0;
     }
@@ -244,7 +246,16 @@ abstract class SetupAbstract
      */
     protected function verifyDirectoryPermissions()
     {
-        // @todo Check permissions for var/, etc.
+        $dirs = array('var', 'var/logs', 'var/cache', 'web', 'web/assets');
+        $error = 0;
+        foreach ($dirs as $dir) {
+            $d = $this->dir . $dir;
+            if (!is_writable($d)) {
+                print "ERROR: {$dir} not writable.\n";
+                $error++;
+            }
+        }
+        return $error > 0 ? false : true;
     }
 
     /**

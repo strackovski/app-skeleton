@@ -15,18 +15,23 @@ require LIBPATH . 'REST_Controller.php';
 /**
  * API Controller
  *
+ * Extends the REST Controller class providing a clean interface for
+ * creating a RESTful API service.
+ *
  * @property CI_Loader $load
  * @property CI_Input $input
  * @property CI_Uri $uri
  * @property NV_Lang $lang
  * @property \Doctrine\ORM\EntityManager $em
  *
+ * @todo Example usage !!!
+ *
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class ApiController extends REST_Controller
 {
     /**
-     * GET Country
+     * GET Item
      */
     public function itemGet()
     {
@@ -35,7 +40,7 @@ class ApiController extends REST_Controller
     }
 
     /**
-     * GET Countries
+     * GET Items
      */
     public function itemsGet()
     {

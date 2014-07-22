@@ -4,11 +4,10 @@
  *
  * This file enables Doctrine Command Line Tools
  */
-
-define('APPPATH', dirname(__FILE__) . '/app/');
-define('BASEPATH', dirname(__FILE__) . '/system/');
+define('APPPATH', dirname(dirname(dirname(__FILE__))) . '/vendor/nv/codeigniter/application/');
+define('BASEPATH', dirname(dirname(dirname(__FILE__))) . '/vendor/nv/codeigniter/system/');
 define('FCPATH', str_replace(pathinfo(__FILE__, PATHINFO_BASENAME), '', __FILE__));
-define('SRCPATH', 'src/nv/PROJECT_NAME/');
+define('SRCPATH', 'src/');
 define('ENVIRONMENT', 'development');
 
 chdir(APPPATH);

@@ -38,7 +38,7 @@ class ProjectSetup extends SetupAbstract
 
         $useDb = $this->promptUser("Does this application use a database? [Y/n]");
         if (strtolower($useDb) === 'y') {
-            // @todo Enable 'database' in config/autoload.php
+            // @todo Enable 'database' in config/autoload.php OR check if db enabled in autoload?
             $this->useDB = true;
             $dbOptions = array('dbdriver', 'hostname', 'username', 'password', 'database');
             print "Please provide the following database server parameters: \n";
@@ -50,7 +50,7 @@ class ProjectSetup extends SetupAbstract
             $dbParams = $this->verifyDatabaseConfiguration();
             $useOrm = $this->promptUser("Enable Doctrine ORM? [Y/n]");
             if (strtolower($useOrm) === 'y') {
-                // @todo Enable 'doctrine' in config/autoload.php
+                // @todo Enable 'doctrine' in config/autoload.php or check if doctrine enabled in autoload?
                 $this->createEntityManager($dbParams);
             }
         }
@@ -68,7 +68,11 @@ class ProjectSetup extends SetupAbstract
         if ($this->useDB) {
             $this->verifyDatabaseConfiguration();
         }
-        // @todo check permissions
+
+        if ( ! $this->verifyDirectoryPermissions()) {
+            print "Fix the permission errors printed above.\n";
+        }
+
         return true;
     }
 }
