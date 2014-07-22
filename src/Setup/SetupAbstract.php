@@ -159,17 +159,17 @@ abstract class SetupAbstract
     }
 
     /**
-     * Verifies settings defined in app/config/database.php
+     * Verifies settings defined in config/database.php
      *
      * @return array Array of database connection parameters
      */
     protected function verifyDatabaseConfiguration()
     {
-        if (!file_exists($this->dir . "app/config/database.php")) {
+        if (!file_exists($this->dir . "config/database.php")) {
             trigger_error("Required configuration file database.php not found.");
         }
 
-        require $this->dir . "app/config/database.php";
+        require $this->dir . "config/database.php";
         if (isset($db) != false and is_array($db)) {
             // Check if db parameters are set
             if (!array_key_exists('default', $db)) {

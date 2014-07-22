@@ -35,7 +35,7 @@ class ProjectSetup extends SetupAbstract
         print "Please provide the following configuration options: \n";
 
         $useDb = $this->promptUser("Does this application use a database? [Y/n]");
-        if (strtolower($useDb) === 'y') {
+        if (strtolower($useDb) === 'y' or $useDb === '') {
             $this->useDB = true;
             $dbOptions = array('dbdriver', 'hostname', 'username', 'password', 'database');
             print "Please provide the following database server parameters: \n";
@@ -46,7 +46,7 @@ class ProjectSetup extends SetupAbstract
             print "Database configuration saved, verifying...";
             $dbParams = $this->verifyDatabaseConfiguration();
             $useOrm = $this->promptUser("Enable Doctrine ORM? [Y/n]");
-            if (strtolower($useOrm) === 'y') {
+            if (strtolower($useOrm) === 'y' or $useOrm === '') {
                 $this->createEntityManager($dbParams);
             }
         }
@@ -57,7 +57,7 @@ class ProjectSetup extends SetupAbstract
     /**
      * Verify project configuration
      *
-     * @return bool|mixed
+     * @return bool
      */
     public function verify()
     {
@@ -67,6 +67,7 @@ class ProjectSetup extends SetupAbstract
 
         if ( ! $this->verifyDirectoryPermissions()) {
             print "Fix the permission errors printed above.\n";
+            return false;
         }
 
         return true;
