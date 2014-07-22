@@ -248,16 +248,46 @@ abstract class SetupAbstract
      */
     protected function verifyDirectoryPermissions()
     {
-        $dirs = array('var', 'var/logs', 'var/cache', 'web', 'web/assets');
-        $error = 0;
+        if (!file_exists($this->dir . 'var')) {
+            trigger_error(
+                "Directory 'var' missing in ".
+                "project root. Create it and try again."
+            );
+        }
+
+        if(!is_writeable($this->dir . 'var')) {
+            trigger_error(
+                "The 'var' directory must be writable by ".
+                "the web server and the command line user!"
+            );
+        }
+
+        $dirs = array(
+            $this->dir . 'var/logs',
+            $this->dir . 'var/cache',
+            $this->dir . 'var/cache/orm',
+            $this->dir . 'var/cache/orm/proxy',
+            $this->dir . 'var/cache/twig'
+        );
+
         foreach ($dirs as $dir) {
-            $d = $this->dir . $dir;
-            if (!is_writable($d)) {
-                print "ERROR: {$dir} not writable.\n";
-                $error++;
+            if (!file_exists($dir)) {
+                if (!mkdir(0755)) {
+                    trigger_error(
+                        "Error encountered while creating {$dir} directory."
+                    );
+                }
+                print "Created directory {$dir}.\n";
+            }
+
+            if (!is_writable($dir)) {
+                trigger_error(
+                    "The {$dir} directory must be writable by ".
+                    "the web server and the command line user!"
+                );
             }
         }
-        return $error > 0 ? false : true;
+        return true;
     }
 
     /**
@@ -267,21 +297,24 @@ abstract class SetupAbstract
     {
         $dirs = array( $this->dir . 'temp');
         foreach ($dirs as $dir) {
-            try {
-                $files = new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
-                    \RecursiveIteratorIterator::CHILD_FIRST
-                );
+            if (file_exists($dir)) {
+                try {
+                    $files = new \RecursiveIteratorIterator(
+                        new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
+                        \RecursiveIteratorIterator::CHILD_FIRST
+                    );
 
-                foreach ($files as $fileinfo) {
-                    $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
-                    $todo($fileinfo->getRealPath());
+                    foreach ($files as $fileinfo) {
+                        $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+                        $todo($fileinfo->getRealPath());
+                    }
+                    rmdir($dir);
+                } catch (\Exception $e) {
+                    print "Removal of temporary items failed: {$e->getMessage()}";
+                    return false;
                 }
-                rmdir($dir);
-            } catch (\Exception $e) {
-                print "Removal of temporary items failed: {$e->getMessage()}";
             }
         }
-        return;
+        return true;
     }
 }
