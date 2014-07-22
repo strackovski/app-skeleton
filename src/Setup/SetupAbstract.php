@@ -272,12 +272,12 @@ abstract class SetupAbstract
 
         foreach ($dirs as $dir) {
             if (!file_exists($dir)) {
-                if (!mkdir(0755)) {
+                if (!mkdir($dir, 0755)) {
                     trigger_error(
                         "Error encountered while creating {$dir} directory."
                     );
                 }
-                print "Created directory {$dir}.\n";
+                print "Created directory {$dir}\n";
             }
 
             if (!is_writable($dir)) {
