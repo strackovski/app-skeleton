@@ -1,5 +1,5 @@
-/* {PROJECT_NAME} CSS Styles */
-/* {AUTHOR_NAME} {AUTHOR_EMAIL} */
+/* PROJECT_NAME CSS Styles */
+/* AUTHOR_INFO */
 
 /* Bootstrap rules reset/overwrite */
 
@@ -8,5 +8,3 @@
 body{}
 
 /* Project specific rules*/
-
-.test{color: #333;}
