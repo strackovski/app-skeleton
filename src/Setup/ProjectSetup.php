@@ -17,7 +17,7 @@ use nv\PROJECT_NAME\Setup\SetupAbstract;
  *
  * Enables project configuration from command line
  *
- * @package nv\Project\Setup
+ * @package nv\PROJECT_NAME\Setup
  */
 class ProjectSetup extends SetupAbstract
 {
@@ -62,7 +62,9 @@ class ProjectSetup extends SetupAbstract
     public function verify()
     {
         if ($this->useDB) {
-            $this->verifyDatabaseConfiguration();
+            if( ! $this->verifyDatabaseConfiguration()) {
+                return false;
+            }
         }
 
         if ( ! $this->verifyDirectoryPermissions()) {
