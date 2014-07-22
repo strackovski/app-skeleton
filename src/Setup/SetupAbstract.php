@@ -22,7 +22,7 @@ abstract class SetupAbstract
     /** @var string Application name */
     protected $applicationName;
 
-    /** @var string App root path */
+    /** @var string Application root path */
     protected $dir;
 
     /** @var bool Whether to use a database for this project */
@@ -36,7 +36,7 @@ abstract class SetupAbstract
     public function __construct($applicationName)
     {
         $this->applicationName = $applicationName;
-        $this->dir = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/';
+        $this->dir = dirname(dirname(dirname(__FILE__))) . '/';
         $this->useDB = false;
     }
 
@@ -162,7 +162,7 @@ abstract class SetupAbstract
     /**
      * Verifies settings defined in config/database.php
      *
-     * @return array Array of database connection parameters
+     * @return bool|array Array of database connection parameters
      */
     protected function verifyDatabaseConfiguration()
     {
@@ -172,7 +172,6 @@ abstract class SetupAbstract
 
         require $this->dir . "config/database.php";
         if (isset($db) and is_array($db)) {
-            // Check if db parameters are set
             if (!array_key_exists('default', $db)) {
                 trigger_error("Invalid database configuration file.\n");
             }
@@ -187,7 +186,7 @@ abstract class SetupAbstract
                 case 'mysqli':
                     if (class_exists('mysqli')) {
                         try {
-                            $connection = new \mysqli(
+                            new \mysqli(
                                 $db['default']['hostname'],
                                 $db['default']['username'],
                                 $db['default']['password'],
@@ -200,7 +199,7 @@ abstract class SetupAbstract
                     break;
                 case 'postgresql':
                     if (function_exists("pg_connect")) {
-                        $connection = pg_connect(
+                        pg_connect(
                             "host={$db['default']['hostname']} ".
                             "dbname={$db['default']['database']} ".
                             "user={$db['default']['username']} ".
@@ -234,17 +233,16 @@ abstract class SetupAbstract
                 }
                 print "OK\n";
                 return $db;
-
         }
         trigger_error(
             "Failed retrieving database connection parameters.\n".
             "Make sure parameters are set in config/database.php"
         );
-        return 0;
+        return false;
     }
 
     /**
-     * Ensures directory permissions are set correctly
+     * Verifies directory permissions are set correctly
      *
      * @return bool
      */
@@ -268,7 +266,6 @@ abstract class SetupAbstract
     protected function cleanUp()
     {
         $dirs = array( $this->dir . 'temp');
-
         foreach ($dirs as $dir) {
             try {
                 $files = new \RecursiveIteratorIterator(
