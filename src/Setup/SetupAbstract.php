@@ -115,6 +115,7 @@ abstract class SetupAbstract
 
         $file = file_get_contents($this->dir . "config/{$configFile}.php");
         $fileKey = $configFile === 'database' ? 'db' : $configFile;
+        // @todo This must be fixed! Can't do such naive pattern matching here...
         $pattern = $group ?
             '/'.$fileKey.'\[\''.$group.'\'\]\[\''.$key.'\'\] = \'.*\';/' :
             '/'.$fileKey.'\[\''.$key.'\'\] = \'.*\';/';
@@ -170,7 +171,7 @@ abstract class SetupAbstract
         }
 
         require $this->dir . "config/database.php";
-        if (isset($db) != false and is_array($db)) {
+        if (isset($db) and is_array($db)) {
             // Check if db parameters are set
             if (!array_key_exists('default', $db)) {
                 trigger_error("Invalid database configuration file.\n");
@@ -182,55 +183,58 @@ abstract class SetupAbstract
             }
             print "OK\nTrying to connect to database...";
 
-            // @todo [fix] Error-catching for each driver separately: mysqli throws exception, pg ...
-            try {
-                switch ($db['default']['dbdriver']) {
-                    case 'mysqli':
-                        if (class_exists('mysqli')) {
+            switch ($db['default']['dbdriver']) {
+                case 'mysqli':
+                    if (class_exists('mysqli')) {
+                        try {
                             $connection = new \mysqli(
                                 $db['default']['hostname'],
                                 $db['default']['username'],
                                 $db['default']['password'],
                                 $db['default']['database']
                             );
+                        } catch (\ErrorException $e) {
+                            trigger_error("\nError: " . $e->getMessage());
                         }
-                        break;
-                    case 'postgresql':
-                        if (function_exists("pg_connect")) {
-                            $connection = pg_connect(
-                                "host={$db['default']['hostname']} ".
-                                "dbname={$db['default']['database']} ".
-                                "user={$db['default']['username']} ".
-                                "password={$db['default']['password']}"
+                    }
+                    break;
+                case 'postgresql':
+                    if (function_exists("pg_connect")) {
+                        $connection = pg_connect(
+                            "host={$db['default']['hostname']} ".
+                            "dbname={$db['default']['database']} ".
+                            "user={$db['default']['username']} ".
+                            "password={$db['default']['password']}"
+                        )
+                        or trigger_error("\nError: ".pg_last_error());
+                    }
+                    break;
+                case 'mssql':
+                    if (function_exists("mssql_connect")) {
+                        $server = "{$db['default']['hostname']}{$db['default']['database']}";
+                        $connection = mssql_connect(
+                            $server,
+                            $db['default']['username'],
+                            $db['default']['password']
+                        );
+                        if (!$connection) {
+                            trigger_error("\nError: Something went wrong while connecting to MSSQL");
+                        } else {
+                            $selected = mssql_select_db(
+                                $db['default']['database'],
+                                $connection
                             )
-                            or die("\nCan't connect to database ".pg_last_error());
-                        }
-                        break;
-                    case 'mssql':
-                        if (function_exists("mssql_connect")) {
-                            $server = "{$db['default']['hostname']}{$db['default']['database']}";
-                            $connection = mssql_connect(
-                                $server,
-                                $db['default']['username'],
-                                $db['default']['password']
+                            or trigger_error(
+                                "\nError: Cant't open database ".
+                                "{$db['default']['database']}"
                             );
-                            if (!$connection) {
-                                die("\nSomething went wrong while connecting to MSSQL");
-                            } else {
-                                $selected = mssql_select_db(
-                                    $db['default']['database'],
-                                    $connection
-                                )
-                                or die("\nCant't open database {$db['default']['database']}");
-                            }
                         }
-                        break;
+                    }
+                    break;
                 }
                 print "OK\n";
                 return $db;
-            } catch (\ErrorException $e) {
-                trigger_error("Database connection failed: " . $e->getMessage());
-            }
+
         }
         trigger_error(
             "Failed retrieving database connection parameters.\n".
@@ -281,7 +285,6 @@ abstract class SetupAbstract
                 print "Removal of temporary items failed: {$e->getMessage()}";
             }
         }
-
         return;
     }
 }
