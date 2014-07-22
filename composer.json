@@ -54,7 +54,7 @@
     },
     "autoload": {
         "psr-4": {
-            "nv\\app-skeleton": "src/"
+            "nv\\app-skeleton\\": "src/"
         }
     },
     "scripts": {
