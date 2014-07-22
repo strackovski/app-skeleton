@@ -1,7 +1,9 @@
 #!/bin/bash
 # $1 Target directory name
 
-if [ -d /srv/samba/share/apache/$1 ]; then
+BASE=result=${PWD}
+
+if [ -d $PWD/$1 ]; then
 	echo "Directory already exists, aborting."
 else
 	git clone https://github.com/strackovski/app-skeleton.git $1
