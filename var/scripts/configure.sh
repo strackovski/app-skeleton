@@ -30,6 +30,12 @@ else
         sed -i "s/app-skeleton/$1/" .htaccess
     fi
 
+    if [ ! -f phpdoc.xml ]; then
+        printf "phpdoc.xml not found, skipping...\n"
+    else
+        sed -i "s/app-skeleton/$1/" phpdoc.xml
+    fi
+
     sed -i "s/app-skeleton/$1/" composer.json
 	find src/ -type f -exec \
 	    sed -i "s/PROJECT_NAME/$1/g" {} +
