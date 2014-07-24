@@ -5,4 +5,5 @@ var/cache/orm/proxies/*
 var/cache/twig/*
 vendor/
 docs/*
+media/
 composer.lock
