@@ -36,7 +36,7 @@ class AppController extends NV_Controller
     {
         $data['lang'] = $this->lang->lang();
         try {
-            $this->twig->display('home.html.twig', $data);
+            $this->twig->display('master.html.twig', $data);
         } catch (Exception $e) {
             log_message('error', $e->getMessage());
             show_error($e->getMessage(), 500);

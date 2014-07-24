@@ -115,7 +115,7 @@ abstract class SetupAbstract
 
         $file = file_get_contents($this->dir . "config/{$configFile}.php");
         $fileKey = $configFile === 'database' ? 'db' : $configFile;
-        // @todo This must be fixed! Can't do such naive pattern matching here...
+        // @todo Fix this!
         $pattern = $group ?
             '/'.$fileKey.'\[\''.$group.'\'\]\[\''.$key.'\'\] = \'.*\';/' :
             '/'.$fileKey.'\[\''.$key.'\'\] = \'.*\';/';
@@ -149,9 +149,8 @@ abstract class SetupAbstract
             'host'          => $databaseParameters['default']['hostname'],
             'dbname'        => $databaseParameters['default']['database']
         );
-        // @todo [fix] Verify that proxies_dir is set correctly !!!
-        $proxies_dir      =  dirname(dirname(__FILE__)) . '/var/cache/orm/proxy';
-        $metadata_paths   = array($this->dir.'/src/nv/'.$this->applicationName.'/Model/Entity');
+        $proxies_dir      = $this->dir . '/var/cache/orm/proxy';
+        $metadata_paths   = array($this->dir . '/src/Model/Entity');
         $config =
             \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($metadata_paths, false, $proxies_dir);
 

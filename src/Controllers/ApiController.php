@@ -24,8 +24,6 @@ require LIBPATH . 'REST_Controller.php';
  * @property NV_Lang $lang
  * @property \Doctrine\ORM\EntityManager $em
  *
- * @todo Example usage !!!
- *
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class ApiController extends REST_Controller

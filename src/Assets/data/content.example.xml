@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contents>
+    <content id="1" name="about" type="page">
+        <title>About </title>
+        <subtitle>and more</subtitle>
+        <description>....</description>
+        <body>...</body>
+    </content>
+    <content id="2" name="description" type="page">
+        <title>Description</title>
+        <subtitle>...</subtitle>
+        <description>Description</description>
+        <body>Body</body>
+        <extras>
+            <extra>
+                <title>Example 1</title>
+                <body><![CDATA[<pre>some code...</pre>]]></body>
+            </extra>
+            <extra>
+                <title>Example 2</title>
+                <body>Example 2 body</body>
+            </extra>
+        </extras>
+    </content>
+    <content id="3" name="bar" type="links">
+        <title>Links</title>
+        <links>
+            <link href="http://www.github.com">github</link>
+            <link href="">...</link>
+        </links>
+    </content>
+</contents>

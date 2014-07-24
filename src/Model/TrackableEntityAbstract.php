@@ -11,13 +11,16 @@
 namespace nv\PROJECT_NAME\Model;
 
 /**
- * Class TrackableEntityAbstract
+ * Class TrackableEntityAbstract (Entity Superclass)
+ *
+ * @MappedSuperclass
  *
  * Extend this class in concrete entity classes to get access to timestampable
  * and authorable capabilities. Timestampable records the date/time of item
  * creation and modification, Authorable records the author of the item.
  *
  * @package nv\PROJECT_NAME\Model
+ * @author  Vladimir Stračkovski <vlado@nv3.org>
  */
 abstract class TrackableEntityAbstract implements TimestampableInterface, AuthorableInterface
 {
@@ -31,7 +34,9 @@ abstract class TrackableEntityAbstract implements TimestampableInterface, Author
     protected $author;
 
     /**
+     * Get time modified
      *
+     * @return \DateTime
      */
     public function getTimeModified()
     {
@@ -39,7 +44,7 @@ abstract class TrackableEntityAbstract implements TimestampableInterface, Author
     }
 
     /**
-     *
+     * Set time modified
      */
     public function setTimeModified()
     {
@@ -47,7 +52,9 @@ abstract class TrackableEntityAbstract implements TimestampableInterface, Author
     }
 
     /**
+     * Get time created
      *
+     * @return \DateTime
      */
     public function getTimeCreated()
     {
@@ -55,7 +62,9 @@ abstract class TrackableEntityAbstract implements TimestampableInterface, Author
     }
 
     /**
+     * Set time created
      *
+     * @return \DateTime
      */
     public function setTimeCreated()
     {
@@ -63,7 +72,7 @@ abstract class TrackableEntityAbstract implements TimestampableInterface, Author
     }
 
     /**
-     *
+     * Get author
      */
     public function getAuthor()
     {
@@ -71,7 +80,7 @@ abstract class TrackableEntityAbstract implements TimestampableInterface, Author
     }
 
     /**
-     *
+     * Set author
      */
     public function setAuthor()
     {

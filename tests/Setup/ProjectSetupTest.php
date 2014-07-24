@@ -15,7 +15,7 @@ namespace nv\PROJECT_NAME\Setup\Test;
  *
  * @package nv\Project\Setup
  */
-class ProjectSetupTest
+class ProjectSetupTest extends \PHPUnit_Framework_TestCase
 {
 
 }

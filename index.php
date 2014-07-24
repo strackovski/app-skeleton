@@ -157,7 +157,7 @@ if(!file_exists('vendor/autoload.php')){
     if(defined('ENVIRONMENT') and ENVIRONMENT == 'development'){
         exit(
             'Please run composer install prior to running this application. '.
-                'The install command will generate the missing autoloader files.'
+            'The install command will generate the missing autoloader files.'
         );
     }
     else{

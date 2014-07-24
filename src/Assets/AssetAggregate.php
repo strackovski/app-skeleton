@@ -10,9 +10,6 @@
  */
 namespace nv\PROJECT_NAME\Assets;
 
-use Assetic\Asset\FileAsset;
-use Assetic\Asset\GlobAsset;
-use Assetic\Asset\AssetCollection;
 use Assetic\AssetManager;
 use Assetic\FilterManager;
 use Assetic\Factory\AssetFactory;
@@ -32,10 +29,10 @@ use Assetic\Factory\Worker\CacheBustingWorker;
  */
 class AssetAggregate
 {
-    /** @var \Assetic\AssetManager */
+    /** @var \Assetic\AssetManager Asset manager */
     private $am;
 
-    /** @var \Assetic\FilterManager */
+    /** @var \Assetic\FilterManager Asset filter manager */
     private $fm;
 
     /** @var string Directory to dump output to */
@@ -81,9 +78,9 @@ class AssetAggregate
         $factory->setDebug(true);
 
         $js = $factory->createAsset(array(
+            'js/*.js',
             dirname(dirname(dirname(__FILE__))) .
-                '/vendor/twitter/bootstrap/dist/js/bootstrap.min.js',
-            'js/*.js'
+                '/vendor/twitter/bootstrap/dist/js/bootstrap.min.js'
         ), array(
             'js_min'
         ));

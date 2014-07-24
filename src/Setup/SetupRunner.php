@@ -19,12 +19,15 @@ if (!defined('BASEPATH')) {
 /**
  * Class SetupRunner
  *
+ * @package nv\PROJECT_NAME\Setup
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 final class SetupRunner
 {
     /**
      * Run project setup scripts
+     *
+     * Exposes one static method that starts project setup.
      *
      * @param \Composer\Script\Event $event
      * @return bool
