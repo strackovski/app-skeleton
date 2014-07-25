@@ -1,6 +1,6 @@
 {
     "name": "nv/app-skeleton",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "type": "project",
     "homepage": "http://www.nv3.org",
     "description": "RESTFul Web Application Skeleton with CodeIgniter, Doctrine ORM, Twig, Assetic.",
